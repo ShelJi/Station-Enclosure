@@ -1,0 +1,203 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>Rover Station Enclosure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: drafting-table workbench — viewport left, spec sheet right, stacks on phones */
+:root {
+  --bg: #eef0f1; --panel: #f8f9f9; --fg: #1d2326; --muted: #5d676c; --line: #cfd5d8;
+  --accent: #2f6f8f; --stage: #e4e7e9; --warn: #9a5b13;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15191b; --panel: #1c2124; --fg: #e3e8ea; --muted: #97a3a9; --line: #2f383c;
+  --accent: #7fb6d2; --stage: #23292c; --warn: #e0a65a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15191b; --panel: #1c2124; --fg: #e3e8ea; --muted: #97a3a9; --line: #2f383c;
+  --accent: #7fb6d2; --stage: #23292c; --warn: #e0a65a; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; }
+.wrap { padding-block: 20px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); max-width: 1320px; margin: 0 auto; display: grid; gap: 16px; }
+header h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
+header p { margin: 4px 0 0; color: var(--muted); max-width: 68ch; }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; }
+@media (max-width: 900px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.stage { position: relative; background: var(--stage); border: 1px solid var(--line); border-radius: 6px; aspect-ratio: 4 / 3; max-width: 100%; overflow: hidden; }
+.stage canvas { display: block; width: 100%; height: 100%; }
+.viewlabel { position: absolute; left: 12px; top: 10px; font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.status { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-family: var(--mono); }
+.bar { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: 500 13px var(--sans); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 7px 12px; cursor: pointer; }
+button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.toggles { display: flex; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 13px; }
+.toggles label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+aside { display: grid; gap: 16px; align-content: start; min-width: 0; }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; min-width: 0; }
+h2 { font-size: 11px; font-family: var(--mono); font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+td { padding: 5px 0; border-top: 1px solid var(--line); vertical-align: top; }
+td:last-child { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 8px; }
+tr:first-child td { border-top: 0; }
+.est { color: var(--muted); font-size: 11px; font-family: var(--mono); }
+ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.flag { color: var(--warn); }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Rover Station Enclosure</h1>
+    <p>Built from the front and side sketch: 60 × 65 cm frame (grown from the drawn 50 cm to hold the 40 cm suction motor), five front-open bays, sloped roof cap. Drag to orbit, scroll to zoom. Labelled sizes are used as given; everything else is scaled from the drawing and marked <span class="est">est.</span></p>
+  </header>
+  <div class="main">
+    <div style="display:grid;gap:10px;min-width:0;align-content:start">
+      <div class="stage" id="stage"><div class="viewlabel" id="viewlabel">Three-quarter</div><div class="status" id="status">Loading model…</div></div>
+      <div class="bar" role="group" aria-label="Camera view">
+        <button id="v-front" data-view="front">Front</button>
+        <button id="v-side" data-view="side">Side</button>
+        <button id="v-top" data-view="top">Top</button>
+        <button id="v-tq" data-view="tq" aria-pressed="true">Three-quarter</button>
+        <button id="v-joint" data-view="joint">Joint close-up</button>
+      </div>
+      <div class="toggles">
+        <label><input type="checkbox" id="t-comp" checked> Components</label>
+        <label><input type="checkbox" id="t-roof" checked> Roof cap</label>
+        <label><input type="checkbox" id="t-edges" checked> Edge lines</label>
+      </div>
+    </div>
+    <aside>
+      <section>
+        <h2>Overall</h2>
+        <table>
+          <tr><td>Width</td><td>60.0 cm</td></tr>
+          <tr><td>Height (front)</td><td>65.0 cm</td></tr>
+          <tr><td>Depth at floor <span class="est">est.</span></td><td>23.0 cm</td></tr>
+          <tr><td>Depth at roof seam <span class="est">est.</span></td><td>17.0 cm</td></tr>
+          <tr><td>Roof seam height <span class="est">est.</span></td><td>55.0 cm</td></tr>
+          <tr><td>Back / roof skin <span class="est">est.</span></td><td>1.5 cm</td></tr>
+        </table>
+      </section>
+      <section>
+        <h2>Components (W × H × D)</h2>
+        <table>
+          <tr><td>Pi 5 <span class="est">D est.</span></td><td>16.1 × 4.7 × 3</td></tr>
+          <tr><td>SMPS ×2 <span class="est">D est.</span></td><td>13.6 × 2.9 × 10</td></tr>
+          <tr><td>Suction motor <span class="est">D est.</span></td><td>30 × 40 × 15</td></tr>
+          <tr><td>Jetting motor</td><td>17 × 6.4 × 10</td></tr>
+          <tr><td>Jetting water tank <span class="est">D est.</span></td><td>15.7 × 12.1 × 14</td></tr>
+          <tr><td>Rover space</td><td>empty bay</td></tr>
+        </table>
+      </section>
+      <section>
+        <h2>Differences from the sketch</h2>
+        <ul>
+          <li class="flag">The frame is 65 cm tall, not the labelled 50 cm. A 40 cm suction motor does not fit under the top row in 50 cm, so the lower section grew by 15 cm. The top row, roof cap, width and floor depth are unchanged.</li>
+          <li>The suction bay is now 44.3 cm tall (4.3 cm above the motor). The water tank bay grew to 28.6 cm and the jetting motor bay to 15.5 cm, keeping the drawn wall thicknesses.</li>
+          <li>The back face leans less steeply: it still goes from 23 cm deep at the floor to 17 cm at the roof seam, but over 55 cm instead of 40 cm.</li>
+          <li>The motors and water tank rest on their bay floors instead of the 1.7–4.6 cm gaps the sketch shows.</li>
+          <li>The Pi 5 is drawn floating mid-bay. It is mounted against the sloped roof underside, the only surface it can reach.</li>
+          <li>Materials are assumed. The pencil sketch shows no finishes.</li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script src="enclosure-glb.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const stage = document.getElementById("stage");
+const status = document.getElementById("status");
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.shadowMap.enabled = true;
+stage.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+const key = new THREE.DirectionalLight(0xffffff, 1.6);
+key.position.set(0.8, 1.4, 1.2); key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+Object.assign(key.shadow.camera, { left: -0.6, right: 0.6, top: 0.6, bottom: -0.6, near: 0.1, far: 4 });
+scene.add(key, new THREE.HemisphereLight(0xffffff, 0x888888, 0.5));
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.ShadowMaterial({ opacity: 0.18 }));
+floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+const persp = new THREE.PerspectiveCamera(35, 4 / 3, 0.01, 20);
+const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 20);
+let camera = persp;
+const controls = new OrbitControls(persp, renderer.domElement);
+controls.enableDamping = true;
+
+const VIEWS = {
+  front: { label: "Front (orthographic)", ortho: true, pos: [0, 0.325, 3], target: [0, 0.325, 0], span: 0.42 },
+  side:  { label: "Side, from the right (orthographic)", ortho: true, pos: [3, 0.325, 0], target: [0, 0.325, 0], span: 0.42 },
+  top:   { label: "Top (orthographic)", ortho: true, pos: [0, 3, 0.0001], target: [0, 0.325, 0], span: 0.42 },
+  tq:    { label: "Three-quarter", pos: [1.15, 0.9, 1.5], target: [0, 0.3, 0] },
+  joint: { label: "Joint close-up: roof seam, partitions, Pi 5 mount", pos: [0.3, 0.73, 0.48], target: [0.0, 0.52, 0.02] },
+};
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  persp.aspect = w / h; persp.updateProjectionMatrix();
+  const s = ortho.userData.span || 0.4, a = w / h;
+  Object.assign(ortho, { left: -s * a, right: s * a, top: s, bottom: -s });
+  ortho.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+
+function setView(name) {
+  const v = VIEWS[name];
+  document.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === name));
+  document.getElementById("viewlabel").textContent = v.label;
+  camera = v.ortho ? ortho : persp;
+  ortho.userData.span = v.span || 0.4;
+  camera.position.set(...v.pos);
+  controls.object = camera;
+  controls.target.set(...v.target);
+  controls.enableRotate = !v.ortho;
+  camera.lookAt(controls.target);
+  resize(); controls.update();
+}
+document.querySelectorAll("[data-view]").forEach(b => b.addEventListener("click", () => setView(b.dataset.view)));
+
+const groups = { comp: [], roof: [], edges: [] };
+// The exact enclosure.glb bytes, shipped as base64 because artifacts don't serve .glb.
+const glb = Uint8Array.from(atob(window.ENCLOSURE_GLB || ""), c => c.charCodeAt(0)).buffer;
+new GLTFLoader().parse(glb, "", gltf => {
+  status.remove();
+  gltf.scene.traverse(o => {
+    if (!o.isMesh) return;
+    o.castShadow = o.receiveShadow = true;
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, 20),
+      new THREE.LineBasicMaterial({ color: 0x1d2326, transparent: true, opacity: 0.35 }));
+    o.add(edges); groups.edges.push(edges);
+    if (o.name === "Roof_Cap") groups.roof.push(o);
+    else if (o.name !== "Body_Frame") groups.comp.push(o);
+  });
+  scene.add(gltf.scene);
+  setView("tq");
+}, err => { status.textContent = "The model file did not load: " + err.message; });
+
+for (const [id, key] of [["t-comp", "comp"], ["t-roof", "roof"], ["t-edges", "edges"]])
+  document.getElementById(id).addEventListener("change", e => groups[key].forEach(o => o.visible = e.target.checked));
+
+resize();
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+</script>
+
+</body></html>
